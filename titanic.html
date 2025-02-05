@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to HTML Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSV to HTML Table</h1>
+
+    <?php
+    // Define the CSV file path
+    $csvFile = 'c:\Users\cis101\Desktop\csv\Titanic-Dataset.csv'; // Replace with your CSV file path
+
+    // Check if the file exists
+    if (!file_exists($csvFile)) {
+        die('<p>CSV file does not exist.</p>');
+    }
+
+    // Open the CSV file for reading
+    if (($handle = fopen($csvFile, 'r')) !== FALSE) {
+        // Start the HTML table
+        echo "<table>";
+
+        // Fetch and display the table headers (optional: the first row as headers)
+        if (($headers = fgetcsv($handle, 1000, ',')) !== FALSE) {
+            echo "<thead><tr>";
+            foreach ($headers as $header) {
+                echo "<th>" . htmlspecialchars($header) . "</th>";
+            }
+            echo "</tr></thead><tbody>";
+        }
+
+        // Loop through the rows in the CSV
+        while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+            echo "<tr>";
+
+            // Loop through each column in the row
+            foreach ($data as $column) {
+                echo "<td>" . htmlspecialchars($column) . "</td>";
+            }
+
+            echo "</tr>";
+        }
+
+        // Close the table and the HTML tags
+        echo "</tbody></table>";
+
+        // Close the CSV file
+        fclose($handle);
+    } else {
+        die('<p>Unable to open CSV file.</p>');
+    }
+    ?>
+
+</body>
+</html>
